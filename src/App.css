@@ -93,8 +93,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
   position:relative;
   isolation:isolate;
   overflow:hidden;
-  background:#190c07 url('/images/login-food.png') center/cover no-repeat;
-  display:flex;
+background:#190c07; 
+display:flex;
   flex-direction:column;
   justify-content:center;
   padding:34px clamp(24px,7vw,120px) 24px
@@ -116,11 +116,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
   z-index:2
 }
 .auth-story{
-  min-height:0;
+  min-height:560px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:5px 0 12px
+  padding:28px 34px 26px
 }
 .brand{
   display:inline-flex;
@@ -161,6 +161,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
   font-size:6px;
   letter-spacing:1.5px;
   margin-top:5px
+}
+.brand-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-2;
 }
 .story-copy{
   margin:50px 0 20px;
@@ -1333,9 +1341,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
 }
 .bike-rider{
   position:absolute;
-  left:35%;
-  color:#ffb444;
-  filter:drop-shadow(0 0 7px #ed8d2655)
+  left:0;
+  top:50%;
+  margin-top:-20px;
+  z-index:2
 }
 .route-home{
   font-size:20px;
@@ -1346,7 +1355,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
   padding-bottom:45px;
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
-  gap:16px
+  gap:16px;
+  perspective:1200px;
 }
 .offer-panel,.review-panel,.rewards-panel{
   border:1px solid #6d3c20;
@@ -1354,6 +1364,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
   background:linear-gradient(145deg,#28170f,#1b100b);
   padding:20px;
   min-width:0
+}
+.offer-panel{
+  transition:transform 0.8s;
+  transform-style:preserve-3d
+}
+.offer-panel:hover,
+.offer-panel.flipped{
+  transform:rotateY(180deg)
+}
+.offer-review-reward .offer-panel{
+  transition:transform 0.8s !important;
+  transform-style:preserve-3d;
+}
+.offer-review-reward .offer-panel:hover,
+.offer-review-reward .offer-panel.flipped{
+  transform:rotateY(180deg) !important;
 }
 .section-heading.compact{
   align-items:center;
@@ -2036,7 +2062,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
   }
   .auth-story{
     min-height:0;
-    gap:12px
+    gap:12px;
+    padding:20px 18px
   }
   .story-copy{
     margin:10px 0 0
@@ -2635,5 +2662,98 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
     animation-duration:.01ms!important;
     animation-iteration-count:1!important;
     transition-duration:.01ms!important
+  }
+}
+
+
+:root{ --neon:255,154,60; }
+
+.offer-panel,
+.review-panel,
+.rewards-panel,
+.offer-tile,
+.mood-card,
+.food-card,
+.how-card,
+.app-promo,
+.delivery-strip,
+.coin-balance,
+.review-quote,
+.category-pill{
+  border-color:rgba(var(--neon),.5);
+  box-shadow:
+    0 0 6px rgba(var(--neon),.3),
+    0 0 18px rgba(var(--neon),.15),
+    inset 0 0 10px rgba(var(--neon),.06);
+  transition:box-shadow .4s ease, border-color .4s ease, transform .3s ease, background .2s, color .2s
+}
+
+.offer-panel:hover,
+.review-panel:hover,
+.rewards-panel:hover,
+.offer-tile:hover,
+.mood-card:hover,
+.food-card:hover,
+.how-card:hover,
+.app-promo:hover,
+.delivery-strip:hover,
+.coin-balance:hover,
+.review-quote:hover,
+.category-pill:hover{
+  border-color:rgba(var(--neon),.9);
+  box-shadow:
+    0 0 8px rgba(var(--neon),.6),
+    0 0 26px rgba(var(--neon),.35),
+    inset 0 0 14px rgba(var(--neon),.12)
+}
+
+.offer-review-reward .offer-panel{
+  transition:transform .8s, box-shadow .4s ease, border-color .4s ease !important;
+  transform-style:preserve-3d;
+}
+.offer-review-reward .offer-panel:hover,
+.offer-review-reward .offer-panel.flipped{
+  transform:rotateY(360deg) !important;
+}
+.auth-video{
+  position:absolute;
+  top:0;
+  left:0;
+  width:60%;
+  height:100%;
+  object-fit:cover;
+  z-index:-2;
+  -webkit-mask-image:linear-gradient(90deg,#000 55%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 55%,transparent 100%);
+}
+
+@media(max-width:800px){
+  .auth-video{
+    width:100%;
+    opacity:.55;
+    -webkit-mask-image:none;
+    mask-image:none;
+  }
+}
+.auth-left-image{
+  position:absolute;
+  top:0;
+  left:0;
+  width:58%;
+  height:100%;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  z-index:-2;
+  -webkit-mask-image:linear-gradient(90deg,#000 55%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 55%,transparent 100%);
+}
+
+@media(max-width:800px){
+  .auth-left-image{
+    width:100%;
+    opacity:.45;
+    -webkit-mask-image:none;
+    mask-image:none;
   }
 }

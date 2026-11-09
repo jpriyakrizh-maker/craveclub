@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -15,8 +14,6 @@ import {
   ShoppingBag,
   Heart,
   MapPin,
-  ChevronRight,
-  ChevronLeft,
   Coins,
   Clock,
   Flame,
@@ -30,12 +27,8 @@ import {
   CheckCircle2,
   Bike,
   Gift,
-  Instagram,
-  Facebook,
-  Youtube,
   ArrowUpRight,
-  Utensils,
-  CircleHelp
+  Utensils
 } from 'lucide-react';
 
 // FOOD DATA
@@ -203,6 +196,35 @@ const moods = [
   }
 ];
 
+// LOGIN PANEL BACKGROUND (FIX: no-repeat + cover + soft faded edges)
+const storyImage = `${import.meta.env.BASE_URL}images/login-food1.png`;
+
+const storyPanelStyle = {
+  position: 'relative',
+  isolation: 'isolate',      // keeps the bg layer inside this panel
+  alignSelf: 'stretch',
+  overflow: 'hidden',
+  borderRadius: 28
+};
+
+const storyBgStyle = {
+  position: 'absolute',
+  inset: 0,
+  zIndex: -1,
+  pointerEvents: 'none',
+  backgroundImage: `linear-gradient(90deg, rgba(20,8,4,.78), rgba(20,8,4,.4)), url(${storyImage})`,
+  backgroundRepeat: 'no-repeat',   // stops the image from repeating (2 burgers issue)
+  backgroundSize: 'cover',         // image fills the full panel
+  backgroundPosition: 'center',
+  // soft fade on all four edges so no hard rectangle shows
+  WebkitMaskImage:
+    'linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%)',
+  WebkitMaskComposite: 'source-in',
+  maskImage:
+    'linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 8%, #000 92%, transparent 100%)',
+  maskComposite: 'intersect'
+};
+
 // BRAND COMPONENT
 function Brand({ small = false }) {
   return (
@@ -288,10 +310,18 @@ function AuthScreen({ onLogin }) {
       <div className="auth-layout">
         <motion.section
           className="auth-story"
+          style={storyPanelStyle}
           initial={{ opacity: 0, x: -25 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.75 }}
         >
+          {/* Background image layer (single image, no repeat) */}
+          <div
+            className="auth-story-bg"
+            aria-hidden="true"
+            style={storyBgStyle}
+          />
+
           <Brand />
 
           <div className="story-copy">
@@ -659,13 +689,14 @@ function BikeTrack() {
       <motion.div
         className="bike-rider"
         animate={{
-          x: [0, 8, 0],
-          y: [0, -2, 0]
+          left: ['0%', '92%', '92%', '0%', '0%'],
+          scaleX: [1, 1, -1, -1, 1]
         }}
         transition={{
-          duration: 1.6,
+          duration: 5,
           repeat: Infinity,
-          ease: 'easeInOut'
+          ease: 'linear',
+          times: [0, 0.45, 0.5, 0.95, 1]
         }}
       >
         <Bike size={39} />
@@ -693,7 +724,6 @@ function Footer() {
             We bring good food, great people and happy moments together.
             Because life is better with food!
           </p>
-
         </div>
 
         <div className="footer-column">
@@ -757,10 +787,8 @@ function Footer() {
               You're on the list! (Demo subscription)
             </small>
           )}
-
         </div>
       </div>
-
     </footer>
   );
 }
@@ -1066,7 +1094,7 @@ function HomeScreen({ user, onLogout }) {
 
           <div className="hero-visual">
             <img
-              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1400&q=90"
+              src="https://static.vecteezy.com/system/resources/previews/077/186/908/large_2x/close-up-of-a-stacked-burger-with-sesame-seed-bun-on-a-wooden-surface-with-a-dark-background-tasty-food-for-commercial-use-free-photo.jpg"
               alt="Gourmet burger with fresh ingredients"
               onError={(e) => {
                 e.currentTarget.style.opacity = '.2';
@@ -1237,7 +1265,7 @@ function HomeScreen({ user, onLogout }) {
         <section className="feature-band section-pad">
           <div className="app-promo">
             <div className="coin-orbit coin-one">₹</div>
-          
+
             <div className="phone-mock">
               <div className="phone-notch" />
 
@@ -1330,7 +1358,14 @@ function HomeScreen({ user, onLogout }) {
 
         {/* OFFERS, REVIEWS AND REWARDS */}
         <section className="offer-review-reward section-pad" id="offers">
-          <div className="offer-panel">
+          <div
+            className="offer-panel"
+            onClick={(e) => {
+              const el = e.currentTarget;
+              el.classList.add('flipped');
+              setTimeout(() => el.classList.remove('flipped'), 800);
+            }}
+          >
             <div className="section-heading compact">
               <div>
                 <p className="eyebrow">A LITTLE EXTRA JOY</p>
